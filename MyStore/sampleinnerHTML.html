@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .bgcontainer{
+            background-image: linear-gradient(to right,rgba(0, 0, 0, 0.678),rgba(0, 0, 255, 0.582),skyblue);
+        }
+        .main{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: auto;
+        width: 800px;
+        align-items: center;
+        justify-content: center;
+    }
+        div .container{ 
+            width: 200px;
+            border: 0px solid black;
+            padding: 5px;
+            margin: 10px;
+            border-radius: 15px;
+            display: inline-flex;
+            flex-direction: column;
+
+        }
+        .container:hover{
+            border: 1px solid black;
+            background-color: darkgrey;
+    
+        }
+        .heading{
+            text-align: center;
+            font-size:60px;
+            font-style: italic;
+            color:rgb(63, 4, 63);
+            
+        }
+        .heading2{
+            text-align: center;
+            font-size:60px;
+            font-style: italic;
+            color:rgb(63, 4, 63);
+            
+        }
+        .heading img{
+            float: right;
+            height:60px;
+            width:60px ;
+            border-radius: 30px;
+        }
+        .image1{
+            border-radius: 30px;
+           
+        }
+        #cart-count{
+            float:right;
+            display: inline;
+            background-color: red;
+            font-size:25px;
+            margin-left: 70px;
+            color:white;
+            border-radius: 30px;
+            font-family:Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            margin-bottom: 160px;
+        
+        }
+        .cont{
+            background-color: lightcyan;
+            border:1px black;
+            display: flex;
+            flex-direction: row;
+        }
+        
+        
+    </style>
+</head>
+<body class="bgcontainer">
+    <div>
+    <div class="heading">Crickee <img src="cart.png" onclick="clickcart()" class="image1" />
+     <span id="cart-count">0</span>
+    </div>
+   
+</div>
+<hr>
+
+    <div id="products" class="main"></div>
+    <div id="header" ><h2 class="heading2" >My Cart</h2><hr>
+    <div id="mycart" class="hidden" ></div>
+    <div id="order" class="hidden1" ></div>
+    <div id="listCard"></div>
+</div>
+        <script>
+            
+            let product=[
+                {
+                    name:"Cricket Bat",
+                    description: "This Bat is manufactured by CEAT ",
+                    price:3000,
+                    image: "bat.jpg"
+                },
+                {
+                    name:"Leather Red Ball",
+                    description: "It is made up of Leather",
+                    price:1000,
+                    image:"ball.jpg"
+                },
+                {
+                    name:"Stumps",
+                    description: "These stums are made up of wooden",
+                    price:2500,
+                    image:"stumps.jpg"
+                },
+                {
+                    name:"Helmet",
+                    description: "This is manufactured by CEAT",
+                    price:4200,
+                    image:"helmet.jpg"
+                },
+                {
+                    name:"Hand Gloves",
+                    description: "This is manufactured by CEAT",
+                    price:7000,
+                    image:"gloves.jpg"
+                },
+                {
+                    name:"Knee Safety Pads",
+                    description: "This is manufactured by CEAT",
+                    price:2800,
+                    image:"kneepads.jpg"
+                }
+            ];
+                
+            let cart=[];
+             
+            let msg="";
+            product.forEach((value,index)=> {
+            msg=msg+
+            `<div class="container">
+                <div><img src=${value.image} width=200px height=150px></div>
+                <div id="name">${value.name}</div>
+                <div>${value.description}</div>
+                <div>${value.price}&#8377;</div>
+                
+                <div><button onclick="myClick(${index})" style="width: 50px;height: 30px;background-color:black;color:white;">Add</button></div>
+            </div>`;
+        });
+        products.innerHTML=msg;
+
+        
+
+        // let total=cart.reduce((sum, value)=>{
+        //     return sum+ value.price* value.quantity;
+        // },0);
+        // order.innerHTML="<b>Order Value:</b> "+total;
+         // function clickcart(){
+             // document.getElementById("header").style.display="";
+             // document.getElementById("mycart").style.display="";
+             // document.getElementById("order").style.display="";
+         // }
+        let cartCount=0;
+       const myClick=(x)=>{
+        document.getElementById("cart-count").innerHTML=cart.length;
+        if(cart[x]==null){
+            //cart[x]=product[x];
+            cart[x]=JSON.parse(JSON.stringify(product[x]))
+            cart[x].quantity=1;
+        }
+        else{
+            cart[x].quantity= cart[x].quantity+1;
+        }
+        reloadCart();
+    }
+    function reloadCart(){
+    listCard.innerHTML="";
+    cart.forEach((value,index)=>{
+        if(value!=null)
+        {
+            let newDiv=document.createElement("div");
+            newDiv.innerHTML=`<div class="cont">
+            <div><img src=${value.image} width=80px height=50px></div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div>${value.name}</div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div>${value.price.toLocaleString()}</div>&nbsp;&nbsp;
+       
+            <div>
+              <button onclick="changeQuantity(${index},${value.quantity-1})">-</button>
+                ${value.quantity}
+                <button onclick="changeQuantity(${index},${value.quantity+1})">+</button>
+            </div>
+        </div>`;
+                listCard.appendChild(newDiv);
+             
+        }    
+    })
+  }
+    function changeQuantity(i,quantity) {
+                if (quantity==0) {
+                    delete cart[i];
+                } else {
+                    cart[i].quantity=quantity;
+                    cart[i].price=quantity*product[i].price;
+                }
+                reloadCart();
+            }
+    
+    </script>
+   
+</body>
+</html>
